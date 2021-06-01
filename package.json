@@ -1,0 +1,51 @@
+{
+  "name": "blog-proximity-backend",
+  "version": "1.0.0",
+  "description": "This is blog backend to develop the skills in typescript, linting, prettier, and husky :)",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "nodemon",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepakbhadoriya/blog-proximity-backend.git"
+  },
+  "keywords": [
+    "Blog",
+    "Node",
+    "Express",
+    "TypeScript"
+  ],
+  "author": "Deepak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deepakbhadoriya/blog-proximity-backend/issues"
+  },
+  "homepage": "https://github.com/deepakbhadoriya/blog-proximity-backend#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.27.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "husky": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
