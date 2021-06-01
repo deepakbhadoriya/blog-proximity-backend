@@ -25,6 +25,16 @@ https://dev.to/ornio/node-js-express-with-typescript-eslint-jest-prettier-and-hu
 
 <br/>
 
+# Tech/tools
+
+- NodeJS
+- Express
+- TypeScript
+- MongoDB
+- Mongoose
+
+<br/>
+
 # API Routes
 
 ## Authentication
