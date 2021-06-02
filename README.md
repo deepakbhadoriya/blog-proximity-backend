@@ -25,7 +25,7 @@ https://dev.to/ornio/node-js-express-with-typescript-eslint-jest-prettier-and-hu
 
 <br/>
 
-# Tech/tools
+# Tech/tools used
 
 - NodeJS
 - Express
@@ -39,10 +39,10 @@ https://dev.to/ornio/node-js-express-with-typescript-eslint-jest-prettier-and-hu
 
 ## Authentication
 
-| Req    | Type | Url                   | Private |
-| ------ | ---- | --------------------- | ------- |
-| Login  | Post | baseUrl/api/v1/login  | No      |
-| SignUp | Post | baseUrl/api/v1/signup | No      |
+| Req    | Type | Url                        | Private |
+| ------ | ---- | -------------------------- | ------- |
+| Login  | Post | baseUrl/api/v1/auth/login  | No      |
+| SignUp | Post | baseUrl/api/v1/auth/signup | No      |
 
 <br/>
 
@@ -60,13 +60,13 @@ https://dev.to/ornio/node-js-express-with-typescript-eslint-jest-prettier-and-hu
 
 ## Post
 
-| Req      | Type   | Url                                                         | Private |
-| -------- | ------ | ----------------------------------------------------------- | ------- |
-| Create   | Post   | baseUrl/api/v1/post                                         | Yes     |
-| Update   | Put    | baseUrl/api/v1/post/[postId]                                | Yes     |
-| Delete   | Delete | baseUrl/api/v1/post/[postId]                                | Yes     |
-| GetPost  | Get    | baseUrl/api/v1/post/[postId]                                | No      |
-| GetPosts | Get    | baseUrl/api/v1/post?category=tech&currentPage=2&pageSize=10 | No      |
+| Req      | Type   | Url                                                           | Private |
+| -------- | ------ | ------------------------------------------------------------- | ------- |
+| Create   | Post   | baseUrl/api/v1/post                                           | Yes     |
+| Update   | Put    | baseUrl/api/v1/post/[postId]                                  | Yes     |
+| Delete   | Delete | baseUrl/api/v1/post/[postId]                                  | Yes     |
+| GetPost  | Get    | baseUrl/api/v1/post/[postId]                                  | No      |
+| GetPosts | Get    | baseUrl/api/v1/post?user=USERID&category=tech&page=2&limit=10 | No      |
 
 <br/>
 

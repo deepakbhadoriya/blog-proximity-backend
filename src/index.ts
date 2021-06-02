@@ -1,13 +1,19 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express from 'express';
+import log from './logger';
+import connect from './db/connect';
+import routes from './routes';
 
-// Boot express
-const app: Application = express();
-const port = 5000;
+require('dotenv').config();
 
-// Application routing
-app.use('/', (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).send({ data: `Server is running on ${port}` });
+const port = process.env.PORT;
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.listen(port, () => {
+  log.info(`Server listing at ${port}`);
+  connect();
+  routes(app);
 });
-
-// Start server
-app.listen(port, () => console.log(`Server is listening on port ${port}!`));
