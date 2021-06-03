@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     // @ts-ignore
   } = req.query;
 
-  // destructure page and limit and set default values
+  // destructure user, category, page and limit and set default values
   const { user, category, page = 1, limit = 10 } = query || {};
 
   // @ts-ignore
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
     .exec();
 
   // get total documents in the Posts collection
-  const count = await Post.countDocuments();
+  const count = await Post.countDocuments(match);
 
   res.send({
     posts,

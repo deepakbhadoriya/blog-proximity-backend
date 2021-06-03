@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import log from './logger';
 import connect from './db/connect';
 import routes from './routes';
@@ -9,6 +10,7 @@ const port = process.env.PORT;
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
