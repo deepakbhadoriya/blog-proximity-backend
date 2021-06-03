@@ -97,6 +97,7 @@ router.put('/:postId', auth, async (req, res) => {
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { title, description, thumbnailUrl, category },
+      // eslint-disable-next-line comma-dangle
       { new: true }
     )
       .populate(userProperty)
