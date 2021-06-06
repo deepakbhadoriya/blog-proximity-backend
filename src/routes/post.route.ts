@@ -54,7 +54,6 @@ router.get('/', async (req, res) => {
 router.get('/user', auth, async (req, res) => {
   // @ts-ignore
   const user = req.user._id;
-  console.log('user' + user);
   // @ts-ignore
   const query: {
     user: string;

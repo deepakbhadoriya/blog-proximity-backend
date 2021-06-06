@@ -17,6 +17,17 @@ router.get('/', async (req, res) => {
   res.send(category);
 });
 
+// @route   GET api/v1/category/user/:userId
+// @desc    Get the all category of User
+// @access  Public
+router.get('/user', auth, async (req, res) => {
+  // @ts-ignore
+  const userId = req.user._id.toString();
+  validateMongoObjId(userId, res);
+  const category = await Category.find({ user: userId }).populate(userProperty);
+  res.send(category);
+});
+
 // @route   GET api/v1/category/:topicId
 // @desc    Get the category by ID
 // @access  Public
@@ -24,16 +35,6 @@ router.get('/:categoryId', async (req, res) => {
   const categoryId = req.params.categoryId;
   validateMongoObjId(categoryId, res);
   const category = await Category.findById(categoryId).populate(userProperty);
-  res.send(category);
-});
-
-// @route   GET api/v1/category/user/:userId
-// @desc    Get the all category of User
-// @access  Public
-router.get('/user/:userId', async (req, res) => {
-  const userId = req.params.userId;
-  validateMongoObjId(userId, res);
-  const category = await Category.find({ user: userId }).populate(userProperty);
   res.send(category);
 });
 
