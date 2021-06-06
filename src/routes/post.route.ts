@@ -34,6 +34,50 @@ router.get('/', async (req, res) => {
     .skip((page - 1) * limit)
     .populate(userProperty)
     .populate('category')
+    .sort({ createdAt: 'desc' })
+    .exec();
+
+  // get total documents in the Posts collection
+  const count = await Post.countDocuments(match);
+
+  res.send({
+    posts,
+    totalPages: Math.ceil(count / limit),
+    totalPosts: count,
+    currentPage: page,
+  });
+});
+
+// @route   GET api/v1/post/user
+// @desc    Get the all the user post
+// @access  Private
+router.get('/user', auth, async (req, res) => {
+  // @ts-ignore
+  const user = req.user._id;
+  console.log('user' + user);
+  // @ts-ignore
+  const query: {
+    user: string;
+    category: string;
+    page: number;
+    limit: number;
+    // @ts-ignore
+  } = req.query;
+
+  // destructure user, category, page and limit and set default values
+  const { category, page = 1, limit = 10 } = query || {};
+
+  // @ts-ignore
+  const match: { user: any; category: any } = {};
+  if (user) match.user = user;
+  if (category) match.category = category;
+
+  const posts = await Post.find(match)
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .populate(userProperty)
+    .populate('category')
+    .sort({ createdAt: 'desc' })
     .exec();
 
   // get total documents in the Posts collection
