@@ -4,7 +4,8 @@
   "description": "This is blog backend to develop the skills in typescript, linting, prettier, and husky :)",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check-types": "tsc --pretty --noEmit",
