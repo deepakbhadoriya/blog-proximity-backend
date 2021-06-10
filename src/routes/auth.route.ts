@@ -13,8 +13,7 @@ const router = Router();
 // @desc    Get the logged in user details
 // @access  Private
 router.get('/profile', auth, async (req: Request, res: Response) => {
-  // @ts-ignore
-  const user = await User.findById(req.user._id).select('-password');
+  const user = await User.findById(req.body.authUser._id).select('-password');
   res.send(user);
 });
 
@@ -41,7 +40,6 @@ const validateLogin = (req: Request) => {
     password: Joi.string().min(5).max(255).required(),
   });
 
-  // @ts-ignore
   return schema.validate(req);
 };
 

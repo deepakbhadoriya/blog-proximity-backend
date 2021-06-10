@@ -13,8 +13,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
   // verify token
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRETE as string);
-    // @ts-ignore
-    req.user = decoded;
+    req.body.authUser = decoded;
     next();
   } catch (error) {
     res.status(401).json({ msg: 'Token is not Valid' });

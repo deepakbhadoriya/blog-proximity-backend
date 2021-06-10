@@ -21,8 +21,7 @@ router.get('/', async (req, res) => {
 // @desc    Get the all category of User
 // @access  Public
 router.get('/user', auth, async (req, res) => {
-  // @ts-ignore
-  const userId = req.user._id.toString();
+  const userId = req.body.authUser._id.toString();
   validateMongoObjId(userId, res);
   const category = await Category.find({ user: userId }).populate(userProperty);
   res.send(category);
@@ -42,8 +41,7 @@ router.get('/:categoryId', async (req, res) => {
 // @desc    Add new category
 // @access  Private
 router.post('/', auth, async (req, res) => {
-  // @ts-ignore
-  const user = req.user;
+  const user = req.body.authUser;
   const { name } = req.body;
 
   const { error } = validateCategory(req.body);
@@ -65,8 +63,7 @@ router.post('/', auth, async (req, res) => {
 // @access  Private
 router.put('/:categoryId', auth, async (req, res) => {
   const categoryId = req.params.categoryId;
-  // @ts-ignore
-  const user = req.user;
+  const user = req.body.authUser;
   const { name } = req.body;
 
   validateMongoObjId(categoryId, res);
@@ -93,8 +90,7 @@ router.put('/:categoryId', auth, async (req, res) => {
 // @access  Private
 router.delete('/:categoryId', auth, async (req, res) => {
   const categoryId = req.params.categoryId;
-  // @ts-ignore
-  const user = req.user;
+  const user = req.body.authUser;
 
   validateMongoObjId(categoryId, res);
   const category = await Category.findById(categoryId);

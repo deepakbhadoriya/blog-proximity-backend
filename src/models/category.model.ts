@@ -17,7 +17,8 @@ const CategorySchema = new mongoose.Schema({
 function validateCategory(category) {
   const schema = Joi.object({
     name: Joi.string().required(),
-    user: Joi.object().required,
+    user: Joi.object(),
+    authUser: Joi.object(),
   });
 
   return schema.validate(category);

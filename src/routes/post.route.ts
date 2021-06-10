@@ -52,8 +52,7 @@ router.get('/', async (req, res) => {
 // @desc    Get the all the user post
 // @access  Private
 router.get('/user', auth, async (req, res) => {
-  // @ts-ignore
-  const user = req.user._id;
+  const user = req.body.authUser._id;
   // @ts-ignore
   const query: {
     user: string;
@@ -104,11 +103,10 @@ router.get('/:postId', async (req, res) => {
 // @desc    Add new post
 // @access  Private
 router.post('/', auth, async (req, res) => {
-  // @ts-ignore
-  const user = req.user;
-  const { title, description, thumbnailUrl, category } = req.body;
+  const user = req.body.authUser;
+  const { title, description, thumbnailUrl = 'https://placeimg.com/1000/600/any', category } = req.body;
 
-  const { error } = validatePost(req.body);
+  const { error } = validatePost({ title, description });
   if (error) return res.status(400).send(error.details[0].message);
 
   let post = new Post({ title, description, thumbnailUrl, category, user });
@@ -123,8 +121,7 @@ router.post('/', auth, async (req, res) => {
 // @access  Private
 router.put('/:postId', auth, async (req, res) => {
   const postId = req.params.postId;
-  // @ts-ignore
-  const user = req.user;
+  const user = req.body.authUser;
 
   validateMongoObjId(postId, res);
   const post = await Post.findById(postId);
@@ -134,7 +131,7 @@ router.put('/:postId', auth, async (req, res) => {
 
   //* Validates if user owns the post
   if (post.user.toString() === user._id) {
-    const { error } = validatePost(req.body);
+    const { error } = validatePost({ title, description });
     if (error) return res.status(400).send(error.details[0].message);
 
     const updatedPost = await Post.findByIdAndUpdate(
@@ -157,8 +154,7 @@ router.put('/:postId', auth, async (req, res) => {
 // @access  Private
 router.delete('/:postId', auth, async (req, res) => {
   const postId = req.params.postId;
-  // @ts-ignore
-  const user = req.user;
+  const user = req.body.authUser;
 
   validateMongoObjId(postId, res);
   const post = await Post.findById(postId);
