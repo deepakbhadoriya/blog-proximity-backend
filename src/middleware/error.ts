@@ -1,9 +1,8 @@
-import { Errback, Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import log from '../logger';
 
-const error = (err: Errback, req: Request, res: Response, next: NextFunction) => {
-  // @ts-ignore
-  log.error(err.message, err);
+const error = (err: { message: string }, req: Request, res: Response, next: NextFunction) => {
+  log.error(err.message as string, err);
   res.status(500).send('Something failed.');
 };
 

@@ -14,7 +14,6 @@ const PostSchema = new mongoose.Schema({
   },
   thumbnailUrl: {
     type: String,
-    default: 'https://placeimg.com/1000/600/any',
   },
   category: [
     {
@@ -37,7 +36,8 @@ function validatePost(post) {
   const schema = Joi.object({
     title: Joi.string().min(5).max(255).required(),
     description: Joi.string().min(5).required(),
-    user: Joi.object().required,
+    user: Joi.object(),
+    authUser: Joi.object(),
     thumbnailUrl: Joi.string(),
     category: Joi.array(),
   });

@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
+import { Response } from 'express';
 
-// @ts-ignore
-const ifNotFoundById = (data, res, message = 'Not found') => !data && res.status(404).send({ message });
+const ifNotFoundById = (data: any, res: Response, message = 'Not found') => !data && res.status(404).send({ message });
 
-// @ts-ignore
-const validateMongoObjId = (id, res, message = 'Not valid Id') =>
+const validateMongoObjId = (id: string, res: Response, message = 'Not valid Id') =>
   !mongoose.Types.ObjectId.isValid(id) && res.status(404).send({ message });
 
 export { ifNotFoundById, validateMongoObjId };
