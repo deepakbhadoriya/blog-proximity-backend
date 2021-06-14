@@ -30,8 +30,12 @@ router.put('/', auth, async (req, res) => {
   } = req.body;
   const { error } = validateNameEmail({ name, email });
   if (error) return res.status(400).send({ message: error.details[0].message });
-  const user = await User.findByIdAndUpdate(userId, { name, email, bio, avatar }, { new: true }).select('-password');
-  res.send(user);
+  try {
+    const user = await User.findByIdAndUpdate(userId, { name, email, bio, avatar }, { new: true }).select('-password');
+    res.send(user);
+  } catch (err) {
+    res.status(400).send({ message: 'Email Id Already present' });
+  }
 });
 
 export default router;
