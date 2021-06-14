@@ -42,12 +42,12 @@ router.get('/:categoryId', async (req, res) => {
 // @access  Private
 router.post('/', auth, async (req, res) => {
   const user = req.body.authUser;
-  const { name } = req.body;
+  const { name, scrollType } = req.body;
 
   const { error } = validateCategory(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let category = new Category({ name, user });
+  let category = new Category({ name, scrollType, user });
 
   try {
     category = await category.save();
@@ -64,7 +64,7 @@ router.post('/', auth, async (req, res) => {
 router.put('/:categoryId', auth, async (req, res) => {
   const categoryId = req.params.categoryId;
   const user = req.body.authUser;
-  const { name } = req.body;
+  const { name, scrollType } = req.body;
 
   validateMongoObjId(categoryId, res);
   const category = await Category.findById(categoryId);
@@ -75,7 +75,10 @@ router.put('/:categoryId', auth, async (req, res) => {
     const { error } = validateCategory(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     try {
-      const category = await Category.findByIdAndUpdate(categoryId, { name }, { new: true }).populate(userProperty);
+      const category = await Category.findByIdAndUpdate(categoryId, { name, scrollType }, { new: true }).populate(
+        // eslint-disable-next-line comma-dangle
+        userProperty
+      );
       res.send(category);
     } catch (error) {
       res.status(400).send({ message: 'Duplicate category name' });
