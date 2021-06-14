@@ -45,7 +45,7 @@ router.post('/', auth, async (req, res) => {
   const { name, scrollType } = req.body;
 
   const { error } = validateCategory(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ message: error.details[0].message });
 
   let category = new Category({ name, scrollType, user });
 
@@ -73,7 +73,7 @@ router.put('/:categoryId', auth, async (req, res) => {
   //* Validates if user owns the category
   if (category.user.toString() === user._id) {
     const { error } = validateCategory(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
     try {
       const category = await Category.findByIdAndUpdate(categoryId, { name, scrollType }, { new: true }).populate(
         // eslint-disable-next-line comma-dangle

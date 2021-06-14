@@ -107,7 +107,7 @@ router.post('/', auth, async (req, res) => {
   const { title, description, thumbnailUrl = 'https://placeimg.com/1000/600/any', category } = req.body;
 
   const { error } = validatePost({ title, description });
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ message: error.details[0].message });
 
   let post = new Post({ title, description, thumbnailUrl, category, user });
 
@@ -132,7 +132,7 @@ router.put('/:postId', auth, async (req, res) => {
   //* Validates if user owns the post
   if (post.user.toString() === user._id) {
     const { error } = validatePost({ title, description });
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId,

@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
+    default: null,
+  },
+  bio: {
+    type: String,
   },
   date: {
     type: Date,
@@ -48,6 +52,16 @@ const validateUser = (user) => {
   return schema.validate(user);
 };
 
+// @ts-ignore
+const validateNameEmail = (user) => {
+  const schema = Joi.object({
+    name: Joi.string().min(5).max(50).required(),
+    email: Joi.string().min(5).max(255).required().email(),
+  });
+
+  return schema.validate(user);
+};
+
 const User = mongoose.model('User', UserSchema);
 
-export { User, validateUser };
+export { User, validateUser, validateNameEmail };
