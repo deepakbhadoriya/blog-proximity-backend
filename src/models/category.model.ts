@@ -7,6 +7,10 @@ const CategorySchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  scrollType: {
+    type: String,
+    require: true,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -17,6 +21,7 @@ const CategorySchema = new mongoose.Schema({
 function validateCategory(category) {
   const schema = Joi.object({
     name: Joi.string().required(),
+    scrollType: Joi.string().required(),
     user: Joi.object(),
     authUser: Joi.object(),
   });

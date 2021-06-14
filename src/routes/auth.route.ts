@@ -22,13 +22,13 @@ router.get('/profile', auth, async (req: Request, res: Response) => {
 // @access  Public
 router.post('/login', async (req: Request, res: Response) => {
   const { error } = validateLogin(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ message: error.details[0].message });
 
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send('Invalid email or password.');
+  if (!user) return res.status(400).send({ message: 'Invalid email or password.' });
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) return res.status(400).send('Invalid email or password.');
+  if (!validPassword) return res.status(400).send({ message: 'Invalid email or password.' });
 
   const token = user.generateAuthToken();
   res.send({ token });
@@ -48,7 +48,7 @@ const validateLogin = (req: Request) => {
 // @access  Public
 router.post('/register', async (req: Request, res: Response) => {
   const { error } = validateUser(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ message: error.details[0].message });
 
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send('User already registered.');
