@@ -7,7 +7,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
 
   // Check if Not Token
   if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
+    return res.status(401).json({ message: 'No token, authorization denied' });
   }
 
   // verify token
@@ -16,7 +16,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
     req.body.authUser = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ msg: 'Token is not Valid' });
+    res.status(401).json({ message: 'Token is not Valid' });
   }
 };
 
