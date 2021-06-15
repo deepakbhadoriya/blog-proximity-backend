@@ -4,18 +4,9 @@ import bcrypt from 'bcrypt';
 import Joi from 'joi';
 import { pick } from 'lodash';
 
-import auth from '../middleware/auth';
 import { User, validateUser } from '../models/user.model';
 
 const router = Router();
-
-// @route   GET api/v1/auth/profile
-// @desc    Get the logged in user details
-// @access  Private
-router.get('/profile', auth, async (req: Request, res: Response) => {
-  const user = await User.findById(req.body.authUser._id).select('-password');
-  res.send(user);
-});
 
 // @route   GET api/v1/auth/login
 // @desc    Get the logged in user details
@@ -51,7 +42,7 @@ router.post('/register', async (req: Request, res: Response) => {
   if (error) return res.status(400).send({ message: error.details[0].message });
 
   let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(400).send('User already registered.');
+  if (user) return res.status(400).send({ message: 'User already registered.' });
 
   user = new User(pick(req.body, ['name', 'email', 'password']));
   const salt = await bcrypt.genSalt(10);
