@@ -39,43 +39,42 @@ https://dev.to/ornio/node-js-express-with-typescript-eslint-jest-prettier-and-hu
 
 ## Authentication
 
-| Req    | Type | Url                        | Private |
-| ------ | ---- | -------------------------- | ------- |
-| Login  | Post | baseUrl/api/v1/auth/login  | No      |
-| SignUp | Post | baseUrl/api/v1/auth/signup | No      |
+| Req    | Type | Url                          | Private |
+| ------ | ---- | ---------------------------- | ------- |
+| Login  | Post | baseUrl/api/v1/auth/login    | No      |
+| SignUp | Post | baseUrl/api/v1/auth/register | No      |
 
 <br/>
 
 ## User Profile
 
-| Req            | Type   | Url                             | Private |
-| -------------- | ------ | ------------------------------- | ------- |
-| GetProfileById | Get    | baseUrl/api/v1/profile/[userId] | No      |
-| GetProfile     | Get    | baseUrl/api/v1/profile          | Yes     |
-| CreateProfile  | Post   | baseUrl/api/v1/profile          | Yes     |
-| UpdateProfile  | Put    | baseUrl/api/v1/profile          | Yes     |
-| DeleteProfile  | Delete | baseUrl/api/v1/profile          | Yes     |
+| Req           | Type | Url                    | Private |
+| ------------- | ---- | ---------------------- | ------- |
+| GetProfile    | Get  | baseUrl/api/v1/profile | Yes     |
+| UpdateProfile | Put  | baseUrl/api/v1/profile | Yes     |
 
 <br/>
 
 ## Post
 
-| Req      | Type   | Url                                                           | Private |
-| -------- | ------ | ------------------------------------------------------------- | ------- |
-| Create   | Post   | baseUrl/api/v1/post                                           | Yes     |
-| Update   | Put    | baseUrl/api/v1/post/[postId]                                  | Yes     |
-| Delete   | Delete | baseUrl/api/v1/post/[postId]                                  | Yes     |
-| GetPost  | Get    | baseUrl/api/v1/post/[postId]                                  | No      |
-| GetPosts | Get    | baseUrl/api/v1/post?user=USERID&category=tech&page=2&limit=10 | No      |
+| Req          | Type   | Url                                                           | Private |
+| ------------ | ------ | ------------------------------------------------------------- | ------- |
+| Create       | Post   | baseUrl/api/v1/post                                           | Yes     |
+| Update       | Put    | baseUrl/api/v1/post/[postId]                                  | Yes     |
+| Delete       | Delete | baseUrl/api/v1/post/[postId]                                  | Yes     |
+| GetUserPosts | Get    | baseUrl/api/v1/post/user                                      | Yes     |
+| GetPost      | Get    | baseUrl/api/v1/post/[postId]                                  | No      |
+| GetPosts     | Get    | baseUrl/api/v1/post?user=USERID&category=tech&page=2&limit=10 | No      |
 
 <br/>
 
 ## Category
 
-| Req           | Type   | Url                                               | Private |
-| ------------- | ------ | ------------------------------------------------- | ------- |
-| Create        | Post   | baseUrl/api/v1/category                           | Yes     |
-| Update        | Put    | baseUrl/api/v1/category/[categoryId]              | Yes     |
-| Delete        | Delete | baseUrl/api/v1/category/[categoryId]              | Yes     |
-| GetCategory   | Get    | baseUrl/api/v1/category/[categoryId]              | No      |
-| GetCategories | Get    | baseUrl/api/v1/category?currentPage=2&pageSize=10 | No      |
+| Req             | Type   | Url                                  | Private |
+| --------------- | ------ | ------------------------------------ | ------- |
+| Create          | Post   | baseUrl/api/v1/category              | Yes     |
+| Update          | Put    | baseUrl/api/v1/category/[categoryId] | Yes     |
+| Delete          | Delete | baseUrl/api/v1/category/[categoryId] | Yes     |
+| GetUserCategory | Get    | baseUrl/api/v1/category/user         | Yes     |
+| GetCategory     | Get    | baseUrl/api/v1/category/[categoryId] | No      |
+| GetCategories   | Get    | baseUrl/api/v1/category              | No      |

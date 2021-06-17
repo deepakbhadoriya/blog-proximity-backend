@@ -1,5 +1,4 @@
-/* eslint-disable space-before-function-paren */
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 import { Post, validatePost } from '../models/post.model';
 import { ifNotFoundById, validateMongoObjId } from '../utils/errorResponse';
@@ -8,24 +7,23 @@ import auth from '../middleware/auth';
 const router = Router();
 const userProperty = { path: 'user', select: '-password' };
 
+interface QueryTS {
+  user?: string;
+  category?: string;
+  page?: number;
+  limit?: number;
+}
+
 // @route   GET api/v1/post
 // @desc    Get the all the post
 // @access  Public
-router.get('/', async (req, res) => {
-  // @ts-ignore
-  const query: {
-    user: string;
-    category: string;
-    page: number;
-    limit: number;
-    // @ts-ignore
-  } = req.query;
+router.get('/', async (req: Request, res: Response) => {
+  const query = req.query;
 
   // destructure user, category, page and limit and set default values
-  const { user, category, page = 1, limit = 10 } = query || {};
+  const { user, category, page = 1, limit = 10 } = (query as QueryTS) || {};
 
-  // @ts-ignore
-  const match: { user: any; category: any } = {};
+  const match: { user?: string; category?: string } = {};
   if (user) match.user = user;
   if (category) match.category = category;
 
@@ -53,20 +51,12 @@ router.get('/', async (req, res) => {
 // @access  Private
 router.get('/user', auth, async (req, res) => {
   const user = req.body.authUser._id;
-  // @ts-ignore
-  const query: {
-    user: string;
-    category: string;
-    page: number;
-    limit: number;
-    // @ts-ignore
-  } = req.query;
+  const query = req.query;
 
   // destructure user, category, page and limit and set default values
-  const { category, page = 1, limit = 10 } = query || {};
+  const { category, page = 1, limit = 10 } = (query as QueryTS) || {};
 
-  // @ts-ignore
-  const match: { user: any; category: any } = {};
+  const match: { user?: string; category?: string } = {};
   if (user) match.user = user;
   if (category) match.category = category;
 
@@ -137,7 +127,6 @@ router.put('/:postId', auth, async (req, res) => {
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { title, description, thumbnailUrl, category },
-      // eslint-disable-next-line comma-dangle
       { new: true }
     )
       .populate(userProperty)
