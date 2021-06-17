@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import log from '../logger';
 
-// eslint-disable-next-line space-before-function-paren
 const connect = async () => {
   const dbUri = process.env.DB_URI as string;
 

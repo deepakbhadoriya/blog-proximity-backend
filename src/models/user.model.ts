@@ -35,7 +35,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// eslint-disable-next-line space-before-function-paren
 UserSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRETE as string);
   return token;

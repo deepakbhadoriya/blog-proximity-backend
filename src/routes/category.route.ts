@@ -76,7 +76,6 @@ router.put('/:categoryId', auth, async (req, res) => {
     if (error) return res.status(400).send({ message: error.details[0].message });
     try {
       const category = await Category.findByIdAndUpdate(categoryId, { name, scrollType }, { new: true }).populate(
-        // eslint-disable-next-line comma-dangle
         userProperty
       );
       res.send(category);
