@@ -1,161 +1,38 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 
-import { Post, validatePost } from '../models/post.model';
-import { ifNotFoundById, validateMongoObjId } from '../utils/errorResponse';
+import post from '../controller/post.controller';
 import auth from '../middleware/auth';
 
 const router = Router();
-const userProperty = { path: 'user', select: '-password' };
-
-interface QueryTS {
-  user?: string;
-  category?: string;
-  page?: number;
-  limit?: number;
-}
 
 // @route   GET api/v1/post
 // @desc    Get the all the post
 // @access  Public
-router.get('/', async (req: Request, res: Response) => {
-  const query = req.query;
-
-  // destructure user, category, page and limit and set default values
-  const { user, category, page = 1, limit = 10 } = (query as QueryTS) || {};
-
-  const match: { user?: string; category?: string } = {};
-  if (user) match.user = user;
-  if (category) match.category = category;
-
-  const posts = await Post.find(match)
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .populate(userProperty)
-    .populate('category')
-    .sort({ createdAt: 'desc' })
-    .exec();
-
-  // get total documents in the Posts collection
-  const count = await Post.countDocuments(match);
-
-  res.send({
-    posts,
-    totalPages: Math.ceil(count / limit),
-    totalPosts: count,
-    currentPage: page,
-  });
-});
+router.get('/', post.getAllPost);
 
 // @route   GET api/v1/post/user
 // @desc    Get the all the user post
 // @access  Private
-router.get('/user', auth, async (req, res) => {
-  const user = req.body.authUser._id;
-  const query = req.query;
-
-  // destructure user, category, page and limit and set default values
-  const { category, page = 1, limit = 10 } = (query as QueryTS) || {};
-
-  const match: { user?: string; category?: string } = {};
-  if (user) match.user = user;
-  if (category) match.category = category;
-
-  const posts = await Post.find(match)
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .populate(userProperty)
-    .populate('category')
-    .sort({ createdAt: 'desc' })
-    .exec();
-
-  // get total documents in the Posts collection
-  const count = await Post.countDocuments(match);
-
-  res.send({
-    posts,
-    totalPages: Math.ceil(count / limit),
-    totalPosts: count,
-    currentPage: page,
-  });
-});
+router.get('/user', auth, post.getUserAllPost);
 
 // @route   GET api/v1/post/:postId
 // @desc    Get the post by ID
 // @access  Public
-router.get('/:postId', async (req, res) => {
-  const postId = req.params.postId;
-  validateMongoObjId(postId, res);
-  const post = await Post.findById(postId).populate(userProperty).populate('category');
-  res.send(post);
-});
+router.get('/:postId', post.getPostById);
 
 // @route   POST api/v1/post
 // @desc    Add new post
 // @access  Private
-router.post('/', auth, async (req, res) => {
-  const user = req.body.authUser;
-  const { title, description, thumbnailUrl = 'https://placeimg.com/1000/600/any', category } = req.body;
-
-  const { error } = validatePost({ title, description });
-  if (error) return res.status(400).send({ message: error.details[0].message });
-
-  let post = new Post({ title, description, thumbnailUrl, category, user });
-
-  post = await post.save();
-  post = await Post.findById(post._id).populate(userProperty).populate('category');
-  res.send(post);
-});
+router.post('/', auth, post.addPost);
 
 // @route   PUT api/v1/post/:postId
 // @desc    Update the post by Id
 // @access  Private
-router.put('/:postId', auth, async (req, res) => {
-  const postId = req.params.postId;
-  const user = req.body.authUser;
-
-  validateMongoObjId(postId, res);
-  const post = await Post.findById(postId);
-  ifNotFoundById(post, res);
-
-  const { title, description, thumbnailUrl = post.thumbnailUrl, category = post.category } = req.body;
-
-  //* Validates if user owns the post
-  if (post.user.toString() === user._id) {
-    const { error } = validatePost({ title, description });
-    if (error) return res.status(400).send({ message: error.details[0].message });
-
-    const updatedPost = await Post.findByIdAndUpdate(
-      postId,
-      { title, description, thumbnailUrl, category },
-      { new: true }
-    )
-      .populate(userProperty)
-      .populate('category');
-
-    res.send(updatedPost);
-  } else {
-    res.status(401).send({ message: 'Unauthorized access ' });
-  }
-});
+router.put('/:postId', auth, post.updatePost);
 
 // @route   DELETE api/v1/post/:postId
 // @desc    Delete the post by Id
 // @access  Private
-router.delete('/:postId', auth, async (req, res) => {
-  const postId = req.params.postId;
-  const user = req.body.authUser;
-
-  validateMongoObjId(postId, res);
-  const post = await Post.findById(postId);
-  ifNotFoundById(post, res);
-
-  //* Validates if user owns the post
-  if (post.user.toString() === user._id) {
-    const post = await Post.findByIdAndDelete(postId).populate(userProperty).populate('category');
-    res.send(post);
-  } else {
-    res.status(401).send({ message: 'Unauthorized access ' });
-  }
-});
+router.delete('/:postId', auth, post.deletePost);
 
 export default router;
