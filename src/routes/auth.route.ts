@@ -1,56 +1,16 @@
-/* eslint-disable space-before-function-paren */
-import { Router, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import Joi from 'joi';
-import { pick } from 'lodash';
-
-import { User, validateUser } from '../models/user.model';
+import { Router } from 'express';
+import auth from '../controller/auth.controller';
 
 const router = Router();
 
 // @route   GET api/v1/auth/login
 // @desc    Get the logged in user details
 // @access  Public
-router.post('/login', async (req: Request, res: Response) => {
-  const { error } = validateLogin(req.body);
-  if (error) return res.status(400).send({ message: error.details[0].message });
-
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send({ message: 'Invalid email or password.' });
-
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) return res.status(400).send({ message: 'Invalid email or password.' });
-
-  const token = user.generateAuthToken();
-  res.send({ token });
-});
-
-const validateLogin = (req: Request) => {
-  const schema = Joi.object({
-    email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(5).max(255).required(),
-  });
-
-  return schema.validate(req);
-};
+router.post('/login', auth.login);
 
 // @route   POST api/v1/auth/register
 // @desc    Register User route
 // @access  Public
-router.post('/register', async (req: Request, res: Response) => {
-  const { error } = validateUser(req.body);
-  if (error) return res.status(400).send({ message: error.details[0].message });
-
-  let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(400).send({ message: 'User already registered.' });
-
-  user = new User(pick(req.body, ['name', 'email', 'password']));
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
-  await user.save();
-
-  const token = user.generateAuthToken();
-  res.json({ token });
-});
+router.post('/register', auth.register);
 
 export default router;
